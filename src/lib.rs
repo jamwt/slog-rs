@@ -1,5 +1,6 @@
 //! # Slog -  Structured, composable logging for Rust
 
+#![feature(unboxed_closures)]
 #![warn(missing_docs)]
 
 extern crate crossbeam;
@@ -366,17 +367,17 @@ impl<'a> Iterator for OwnedKeyValueNodeIterator<'a> {
 pub fn __slog_static_max_level() -> LevelFilter {
     if !cfg!(debug_assertions) {
         if cfg!(feature = "release_max_level_off") {
-            return LevelFilter::Off
+            return LevelFilter::Off;
         } else if cfg!(feature = "release_max_level_error") {
-            return LevelFilter::Error
+            return LevelFilter::Error;
         } else if cfg!(feature = "release_max_level_warn") {
-            return LevelFilter::Warning
+            return LevelFilter::Warning;
         } else if cfg!(feature = "release_max_level_info") {
-            return LevelFilter::Info
+            return LevelFilter::Info;
         } else if cfg!(feature = "release_max_level_debug") {
-            return LevelFilter::Debug
+            return LevelFilter::Debug;
         } else if cfg!(feature = "release_max_level_trace") {
-            return LevelFilter::Trace
+            return LevelFilter::Trace;
         }
     }
     if cfg!(feature = "max_level_off") {

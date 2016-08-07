@@ -61,13 +61,13 @@ impl Json {
         Json {
             newlines: true,
             values: o!(
-                "ts" => move |rinfo : &RecordInfo| {
+                "ts" => move |rinfo : &RecordInfo| ->String {
                     rinfo.ts().to_rfc3339()
                 },
-                "level" => move |rinfo : &RecordInfo| {
-                    level_to_string(rinfo.level())
+                "level" => move |rinfo : &RecordInfo| ->String{
+                    level_to_string(rinfo.level()).to_string()
                 },
-                "msg" => move |rinfo : &RecordInfo| {
+                "msg" => move |rinfo : &RecordInfo| ->String{
                     rinfo.msg().to_string()
                 }
                 ),

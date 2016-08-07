@@ -169,17 +169,26 @@ impl_serialize_for!(u64, emit_u64);
 impl_serialize_for!(i64, emit_i64);
 impl_serialize_for!(f64, emit_f64);
 
-impl<S: 'static + Serialize, F: Sync + Send + for<'c> Fn(&'c RecordInfo<'c>) -> S> Serialize for F {
+impl Serialize for Box<for <'c> Fn(&'c RecordInfo<'c>) -> Box<Serialize+'static> + 'static + Send + Sync> {
+    fn serialize(&self, rinfo: &RecordInfo, key: &str, serializer: &mut Serializer) -> Result<()> {
+        (*self)(&rinfo).serialize(rinfo, key, serializer)
+    }
+}
+impl SyncSerialize for Box<for <'c> Fn(&'c RecordInfo<'c>) -> Box<Serialize+'static> + 'static + Send + Sync> {}
+
+impl Serialize for Box<for<'c> Fn(&'c RecordInfo<'c>) -> &'c Serialize + Send + Sync> {
     fn serialize(&self, rinfo: &RecordInfo, key: &str, serializer: &mut Serializer) -> Result<()> {
         (*self)(&rinfo).serialize(rinfo, key, serializer)
     }
 }
 
-impl<S: 'static + Serialize, F> SyncSerialize for F
-    where F: 'static + Sync + Send + for<'c, 'd> Fn(&'c RecordInfo<'d>) -> S
-{
+impl<S: Serialize> Serialize for for<'c> Fn(&'c RecordInfo<'c>) -> S + Send + Sync {
+    fn serialize(&self, rinfo: &RecordInfo, key: &str, serializer: &mut Serializer) -> Result<()> {
+        (*self)(&rinfo).serialize(rinfo, key, serializer)
+    }
 }
 
+impl<S: 'static + Serialize> SyncSerialize for for<'c> Fn(&'c RecordInfo<'c>) -> S + Send + Sync {}
 
 impl<W: io::Write + ?Sized> Serializer for W {
     fn emit_none(&mut self, key: &str) -> Result<()> {
