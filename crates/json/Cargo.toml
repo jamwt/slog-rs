@@ -14,7 +14,7 @@ readme = "../../README.md"
 path = "lib.rs"
 
 [dependencies]
-slog = { version = "1.0.0-alpha3", path = "../.." }
-slog-serde = { version = "1.0.0-alpha3", path = "../serde"}
+slog = { version = "1.0.0-alpha3"}
+slog-serde = { version = "1.0.0-alpha3"}
 serde_json = "0.7.1"
 chrono = "0.2"

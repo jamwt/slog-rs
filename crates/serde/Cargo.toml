@@ -14,5 +14,5 @@ readme = "../../README.md"
 path = "lib.rs"
 
 [dependencies]
-slog = { version = "1.0.0-alpha3", path = "../.." }
+slog = { version = "1.0.0-alpha3"}
 serde = "0.7.10"
